@@ -1,0 +1,8 @@
+prefix=/home/student/Downloads/CarND-Capstone-master/ros/devel
+
+Name: waypoint_follower
+Description: Description of waypoint_follower
+Version: 0.0.0
+Cflags: -I/home/student/Downloads/CarND-Capstone-master/ros/src/waypoint_follower/include
+Libs: -L/home/student/Downloads/CarND-Capstone-master/ros/devel/lib -llibwaypoint_follower
+Requires: roscpp std_msgs tf geometry_msgs styx_msgs
