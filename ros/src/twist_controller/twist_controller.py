@@ -13,9 +13,12 @@ class Controller(object):
         # TODO: Implement
         self.yaw_contoller=YawController(wheel_base, steer_ratio, 0.1, max_lat_accel, max_steer_angle)
 
+        #kp=0.3
+        #ki=0.1
+        #kd=0.
         kp=0.3
         ki=0.1
-        kd=0.
+        kd=0.005
         mn=0.
         mx=0.2
         self.throttle_controller= PID(kp, ki, kd,mn,mx)
@@ -51,7 +54,7 @@ class Controller(object):
         throttle=self.throttle_controller.step(vel_error, sample_time)
         brake=0
 
-        if linear_vel==0. and vel_error<0:
+        if linear_vel==0. and current_vel<0.1:
         	throttle=0
         	brake=700
         elif throttle<.1 and vel_error<0:
