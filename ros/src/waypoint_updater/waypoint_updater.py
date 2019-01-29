@@ -24,7 +24,7 @@ TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
 LOOKAHEAD_WPS = 30 # Number of waypoints we will publish. You can change this number
-MAX_DECEL=.5
+MAX_DECEL=.1
 
 class WaypointUpdater(object):
     def __init__(self):
@@ -36,7 +36,7 @@ class WaypointUpdater(object):
         self.stopline_wp_idx=-1
         #self.base_waypoints=None
         self.waypoints_2d=None
-        self.waypoiny_tree=None
+        self.waypoint_tree=None
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -51,7 +51,6 @@ class WaypointUpdater(object):
 
     def waypoints_cb(self, waypoints):
         # TODO: Implement
-        print("traffic_cccccc")
         self.base_lane=waypoints
         if not self.waypoints_2d:
             self.waypoints_2d=[[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
@@ -66,7 +65,7 @@ class WaypointUpdater(object):
         pass
 
     def loop(self):
-        rate=rospy.Rate(50)
+        rate=rospy.Rate(10)
         while not rospy.is_shutdown():
             if self.pose and self.base_lane:
                 #closest_waypoint_idx=self.get_closest_waypoint_idx()
@@ -102,7 +101,6 @@ class WaypointUpdater(object):
         closest_idx=self.get_closest_waypoint_idx()
         farthest_idx=closest_idx+LOOKAHEAD_WPS
         base_waypoints=self.base_lane.waypoints[closest_idx:farthest_idx]
-        print("reeeer")
         if self.stopline_wp_idx == -1 or (self.stopline_wp_idx >= farthest_idx):
             lane.waypoints=base_waypoints
         else:
@@ -133,10 +131,8 @@ class WaypointUpdater(object):
 
     def distance(self, waypoints, wp1, wp2):
         dist = 0
-        print('length waypoints: '+str(len(waypoints)))
         dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
         for i in range(wp1, wp2+1):
-            print("wp1: "+str(wp1)+" wp2+1: "+str(wp2+1))
             dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
             wp1 = i
         return dist
@@ -144,7 +140,6 @@ class WaypointUpdater(object):
 
 if __name__ == '__main__':
     try:
-        print("trying value")
         WaypointUpdater()
     except rospy.ROSInterruptException:
         rospy.logerr('Could not start waypoint updater node.')
