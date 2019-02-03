@@ -1,4 +1,6 @@
-Programming a Real Self-Driving Car.
+Programming a Real Self-Driving Car to run on a highway track.
+The track involves detecting and stopping at traffic lights, respecting speed limits, not exceeding limits of jerk.
+
 ### Usage
 
 1. Install python dependencies
